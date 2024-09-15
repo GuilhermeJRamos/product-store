@@ -1,18 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { ProductsService } from '../../shared/services/products.service';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { CardComponent } from './components/card/card.component';
+import { Router, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { Product } from '../../shared/interfaces/product.interface';
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CardComponent],
+  imports: [CardComponent, RouterLink, MatButtonModule],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss',
 })
 export class ListComponent {
   products: any[] = [];
+  router = inject(Router);
 
   productsService = inject(ProductsService);
 
@@ -20,5 +21,9 @@ export class ListComponent {
     this.productsService.getAll().subscribe((products) => {
       this.products = products;
     });
+  }
+
+  onEdit(product: Product) {
+    this.router.navigate(['/edit-product', product.id]);
   }
 }
