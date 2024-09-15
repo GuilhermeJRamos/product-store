@@ -1,29 +1,15 @@
 import { Component, inject } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductsService } from '../../shared/services/products.service';
 import { Product } from '../../shared/interfaces/product.interface';
+import { FormComponent } from '../../shared/components/form/form.component';
 
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-  ],
+  imports: [FormComponent],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss',
 })
@@ -42,10 +28,8 @@ export class EditComponent {
     }),
   });
 
-  onSubmit() {
-    this.ProductsService.put(this.product.id, {
-      title: this.form.controls.title.value,
-    }).subscribe(() => {
+  onSubmit(product: Product) {
+    this.ProductsService.put(this.product.id, product).subscribe(() => {
       this.matSnackBar.open('Product Editado com Sucesso', 'Close');
       this.router.navigate(['/']);
     });
